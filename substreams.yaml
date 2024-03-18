@@ -3,12 +3,6 @@ package:
   name: substreams_block_index
   version: v0.1.0
 
-protobuf:
-  files:
-    - keys.proto
-  importPaths:
-    - ./proto
-
 binaries:
   default:
     type: wasm/rust-v1
@@ -21,6 +15,6 @@ modules:
     inputs:
       - source: sf.ethereum.type.v2.Block
     output:
-      type: proto:sf.substreams.index.v1.keys
+      type: proto:sf.substreams.index.v1.Keys
 
 network: mainnet
