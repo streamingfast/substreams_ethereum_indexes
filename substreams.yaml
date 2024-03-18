@@ -1,0 +1,26 @@
+specVersion: v0.1.0
+package:
+  name: substreams_block_index
+  version: v0.1.0
+
+protobuf:
+  files:
+    - keys.proto
+  importPaths:
+    - ./proto
+
+binaries:
+  default:
+    type: wasm/rust-v1
+    file: ./target/wasm32-unknown-unknown/release/substreams.wasm
+
+modules:
+  - name: block_index
+    kind: map
+    initialBlock: 0
+    inputs:
+      - source: sf.ethereum.type.v2.Block
+    output:
+      type: proto:sf.substreams.index.v1.keys
+
+network: mainnet
