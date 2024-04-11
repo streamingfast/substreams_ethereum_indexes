@@ -10,8 +10,7 @@ binaries:
 
 modules:
   - name: block_index
-    kind: map
-    initialBlock: 0
+    kind: blockIndex
     inputs:
       - source: sf.ethereum.type.v2.Block
     output:
