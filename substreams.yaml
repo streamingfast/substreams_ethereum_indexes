@@ -8,6 +8,9 @@ binaries:
     type: wasm/rust-v1
     file: ./target/wasm32-unknown-unknown/release/substreams.wasm
 
+imports:
+  smoketest: https://github.com/streamingfast/substreams-monitoring-smoke-test/releases/download/v1.0.3/monitoring-smoke-test-v1.0.3.spkg
+
 modules:
   - name: block_index
     kind: blockIndex
@@ -15,5 +18,31 @@ modules:
       - source: sf.ethereum.type.v2.Block
     output:
       type: proto:sf.substreams.index.v1.Keys
+
+  - name: filtered_blocks
+    use: smoketest:map_eth_block
+    initialBlock: 12390020
+    blockFilter:
+      module: block_index
+      query: es:9bb8f83800000000000000000000000000000000000000000000000000000000
+    inputs:
+      - source: sf.ethereum.type.v2.Block
+
+  - name: filtered_store_eth_stats
+    use: smoketest:store_eth_stats
+    initialBlock: 12390020
+    inputs:
+      - map: filtered_blocks
+
+  - name: filtered_map_eth_stats
+    use: smoketest:map_eth_stats
+    blockFilter:
+      module: block_index
+      query: es:9bb8f83800000000000000000000000000000000000000000000000000000000
+    initialBlock: 12390020
+    inputs:
+      - map: filtered_blocks
+      - store: filtered_store_eth_stats
+        mode: deltas
 
 network: mainnet
