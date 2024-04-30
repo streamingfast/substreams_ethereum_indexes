@@ -9,7 +9,8 @@ binaries:
     file: ./target/wasm32-unknown-unknown/release/substreams.wasm
 
 imports:
-  smoketest: https://github.com/streamingfast/substreams-monitoring-smoke-test/releases/download/v1.0.3/monitoring-smoke-test-v1.0.3.spkg
+  #  smoketest: https://github.com/streamingfast/substreams-monitoring-smoke-test/releases/download/v1.0.3/monitoring-smoke-test-v1.0.3.spkg
+  explorers: /Users/stepd/repos/substreams-explorers/ethereum-explorer/ethereum-explorer-v0.1.2.spkg
 
 modules:
   - name: block_index
@@ -20,7 +21,7 @@ modules:
       type: proto:sf.substreams.index.v1.Keys
 
   - name: filtered_blocks
-    use: smoketest:map_eth_block
+    use: explorers:map_block_full
     initialBlock: 12390020
     blockFilter:
       module: block_index
@@ -28,21 +29,38 @@ modules:
     inputs:
       - source: sf.ethereum.type.v2.Block
 
-  - name: filtered_store_eth_stats
-    use: smoketest:store_eth_stats
+  - name: map_block_meta
+    use: explorers:map_block_meta
     initialBlock: 12390020
+      #    blockFilter:
+      #      module: block_index
+      #      query: es:9bb8f83800000000000000000000000000000000000000000000000000000000
     inputs:
       - map: filtered_blocks
 
-  - name: filtered_map_eth_stats
-    use: smoketest:map_eth_stats
-    blockFilter:
-      module: block_index
-      query: es:9bb8f83800000000000000000000000000000000000000000000000000000000
-    initialBlock: 12390020
-    inputs:
-      - map: filtered_blocks
-      - store: filtered_store_eth_stats
-        mode: deltas
 
+
+        #  - name: filtered_blocks
+        #    use: smoketest:map_eth_block
+        #    initialBlock: 12390020
+        #    blockFilter:
+        #      module: block_index
+        #      query: es:9bb8f83800000000000000000000000000000000000000000000000000000000
+        #    inputs:
+        #      - source: sf.ethereum.type.v2.Block
+        #
+        #  - name: filtered_store_eth_stats
+        #    use: smoketest:store_eth_stats
+        #    initialBlock: 12390020
+        #    inputs:
+        #      - map: filtered_blocks
+        #
+        #  - name: filtered_map_eth_stats
+        #    use: smoketest:map_eth_stats
+        #    initialBlock: 12390020
+        #    inputs:
+        #      - map: filtered_blocks
+        #      - store: filtered_store_eth_stats
+        #        mode: deltas
+        #
 network: mainnet
