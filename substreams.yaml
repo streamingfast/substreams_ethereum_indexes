@@ -15,6 +15,7 @@ imports:
 modules:
   - name: block_index
     kind: blockIndex
+    initialBlock: 12390020
     inputs:
       - source: sf.ethereum.type.v2.Block
     output:
@@ -25,7 +26,8 @@ modules:
     initialBlock: 12390020
     blockFilter:
       module: block_index
-      query: es:9bb8f83800000000000000000000000000000000000000000000000000000000
+      query:
+        string: es:9bb8f83800000000000000000000000000000000000000000000000000000000
     inputs:
       - source: sf.ethereum.type.v2.Block
 
